@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CryptoTest.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,21 @@ namespace CryptoTest.Views
     /// </summary>
     public partial class ShellView : Window
     {
+        private ShellViewModel _viewModel;
         public ShellView()
         {
             InitializeComponent();
+
+            _viewModel = new ShellViewModel();
+            DataContext = _viewModel;
+
+            LoadDataAsync();
+
+        }
+        private async void LoadDataAsync()
+        {
+            var data = await _viewModel.GetDataFromApi();
+            CurrencyDataGrid.ItemsSource = data;
         }
     }
 }

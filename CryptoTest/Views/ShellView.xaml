@@ -1,12 +1,107 @@
-﻿<Window x:Class="CryptoTest.Views.ShellView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CryptoTest.Views"
-        mc:Ignorable="d"
-        Title="ShellView" Height="450" Width="800">
+﻿<Window
+    x:Class="CryptoTest.Views.ShellView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:CryptoTest.ViewModels"
+    xmlns:views="clr-namespace:CryptoTest.Views"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d"
+    Title="ShellView">
+
+    <Window.Resources>
+        <viewModels:ToUpperConverter x:Key="ToUpperConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="230" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--#region Main Menu-->
+        <Grid Grid.Column="1" Margin="30 20 20 20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+                <TextBlock
+                Grid.Row="1"
+                HorizontalAlignment="Left"
+                FontFamily="Raleway Medium"
+                FontSize="32"
+                FontWeight="SemiBold"
+                Text="Cryptos" />
+
+            <Grid 
+                Grid.Row="1"
+                Width="200"
+                Height="50"
+                HorizontalAlignment="Right">
+                <TextBlock
+                    Margin="5,0,30,0"
+                    VerticalAlignment="Center"
+                    Panel.ZIndex="1"
+                    FontSize="16"
+                    Foreground="#b0b9c6"
+                    IsHitTestVisible="False"
+                    Text="Search in Crypto..."
+                    Visibility="{Binding ElementName=txtFilter,Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+                <TextBox
+                    x:Name="txtFilter"
+                    Width="200"
+                    Style="{StaticResource textboxFilter}" />
+            </Grid>
+        <Separator
+                Grid.Row="3"
+                Height="1"
+                Margin="0 10 0 10"
+                Background="#dae2ea" />
+
+            <DataGrid Style="{DynamicResource DataGridStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}"
+                x:Name="CurrencyDataGrid"
+                Grid.Row="4"
+                AutoGenerateColumns="False"
+                FontFamily="Open Sans SemiBold">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="Auto"
+                        CanUserResize="False"
+                        Header="Symbol"
+                        Binding="{Binding Path=symbol, Converter={StaticResource ToUpperConverter}}"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Header="Name"
+                        Binding="{Binding name}"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Header="Price"
+                        Binding="{Binding current_price, StringFormat={}{0:n2}}"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Header="24h Change"
+                        Binding="{Binding price_change_percentage_24h, StringFormat={}{0:n2}}"
+                        IsReadOnly="True"/>
+                    <DataGridTextColumn
+                        Width="*"
+                        Header="Market Cap"
+                        Binding="{Binding market_cap, StringFormat={}{0:n0}}"
+                        IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <!--#endregion-->
     </Grid>
 </Window>
